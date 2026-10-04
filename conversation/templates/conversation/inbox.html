@@ -2,24 +2,23 @@
 {% block title %}Inbox{% endblock %}
 
 {% block content %}
-  <h1 class="mb-6 text-3xl">Inbox</h1>
+  <p class="mb-1 text-sm font-semibold uppercase tracking-wider text-teal-700">MESSAGES</p><h1 class="page-title">Inbox</h1>
 
   <div class="space-y-6">
     {% for conversation in conversations %}
-      <a href="{% url 'conversation:details' conversation.id %}">
-        <div class="p-6 flex bg-gray-100 rounded-xl">
-            <div class="pr-6">
-                <img src="{{ conversation.item.image.url }}" class="w-20 rounded-xl" alt="">
+      <a class="block rounded-xl border border-gray-200 bg-white transition hover:border-teal-300 hover:shadow-sm" href="{% url 'conversation:details' conversation.id %}">
+        <div class="p-4 sm:p-5 flex flex-col sm:flex-row gap-4">
+            <div class="sm:pr-2 shrink-0">
+                {% if conversation.item.image %}<img src="{{ conversation.item.image.url }}" class="w-20 h-20 object-cover rounded-lg" alt="{{ conversation.item.name }}">{% endif %}
             </div>
 
             <div>
                 {% for member in conversation.members.all %}
                   {% if member != request.user %}
-                    <p class="mb-4">
-                      <strong>{{ member.username }}</strong> |
-                      {{ conversation.modified_at }}
+                    <p class="mb-2 sm:mb-4 break-words">
+                      <strong>{{ member.username }}</strong><span class="mx-2 text-gray-300">·</span><span class="text-sm text-gray-500">{{ conversation.modified_at }}</span>
                     </p>
-                    <p>{{ conversation.item.name }}</p>
+                    <p class="break-words">{{ conversation.item.name }}</p>
                   {% endif %}
                 {% endfor %}
             </div>

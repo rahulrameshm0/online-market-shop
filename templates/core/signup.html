@@ -2,25 +2,25 @@
 {% block title %}Sign up{% endblock %}
 
 {% block content %}
-<div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 round-xl">
-    <h1 class="mb-6 text-3xl">Sign Up</h1>
+<div class="surface my-6 w-full max-w-lg mx-auto p-6 sm:p-9">
+    <p class="mb-2 text-sm font-semibold uppercase tracking-wider text-teal-700">Join Puddle</p><h1 class="mb-2 text-3xl font-bold tracking-tight">Create your account</h1><p class="mb-7 text-sm text-gray-500">Sign up to list items and connect with sellers.</p>
 
     <form action="" method="POST">
         {% csrf_token %}
 
         <div class="mb-3">
-            <label class="inline-block mb-2">Username</label>
+            <label for="id_username" class="inline-block mb-2">Username</label>
             {{ form.username }}
         </div>
 
         <div class="mb-3">
-            <label class="inline-block mb-2">Email</label>
+            <label for="id_email" class="inline-block mb-2">Email</label>
             {{ form.email }}
         </div>
 
         <!-- PASSWORD FIELD -->
         <div class="mb-3">
-            <label class="inline-block mb-2">Password</label>
+            <label for="id_password1" class="inline-block mb-2">Password</label>
             <div class="relative">
                 {{ form.password1 }}
                 <span 
@@ -32,7 +32,7 @@
 
         <!-- CONFIRM PASSWORD FIELD -->
         <div class="mb-3">
-            <label class="inline-block mb-2">Confirm Password</label>
+            <label for="id_password2" class="inline-block mb-2">Confirm password</label>
             <div class="relative">
                 {{ form.password2 }}
                 <span 
@@ -53,11 +53,12 @@
 
         <button 
             type="submit" 
-            class="py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white"
+            class="w-full rounded-lg bg-teal-700 px-5 py-3 font-semibold text-white hover:bg-teal-800"
         >
-            Submit
+            Create account
         </button>
     </form>
+    <p class="mt-5 text-center text-sm text-gray-500">Already have an account? <a href="{% url 'core:login' %}" class="font-semibold text-teal-700">Log in</a></p>
 </div>
 
 <!-- PASSWORD TOGGLE SCRIPT -->

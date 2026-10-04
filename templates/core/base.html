@@ -4,46 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>{% block title %}{% endblock%} | puddle</title>
+    <style>
+        :root { color-scheme: light; --ink:#172b2a; --muted:#687775; --line:#e5ecea; --brand:#147d70; --wash:#f5f8f7; }
+        *,*::before,*::after { box-sizing:border-box; }
+        body { min-width:320px; margin:0; background:#fff; color:var(--ink); font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; -webkit-font-smoothing:antialiased; }
+        img { max-width:100%; height:auto; }
+        input,select,textarea { max-width:100%; font:inherit; }
+        input:not([type=checkbox]):not([type=radio]),select,textarea { width:100%; border:1px solid #dbe4e1; border-radius:10px; background:#fff; padding:12px 14px; color:var(--ink); outline:none; transition:border-color .18s,box-shadow .18s; }
+        input:focus,select:focus,textarea:focus { border-color:#58a99d; box-shadow:0 0 0 3px #147d701a; }
+        textarea { resize:vertical; }
+        form p { margin:0 0 16px; }
+        form p label { display:block; margin-bottom:7px; font-size:.9rem; font-weight:600; color:#344744; }
+        a { color:inherit; text-decoration:none; }
+        button { cursor:pointer; }
+        .site-wrap { width:min(1180px,100%); margin-inline:auto; padding-inline:24px; }
+        .site-nav { border-bottom:1px solid var(--line); background:rgba(255,255,255,.96); }
+        .site-nav-inner { min-height:76px; display:flex; align-items:center; justify-content:space-between; gap:24px; }
+        .brand { display:flex; align-items:center; gap:10px; font-size:1.25rem; font-weight:750; letter-spacing:-.04em; }
+        .brand-mark { display:grid; place-items:center; width:34px; height:34px; border-radius:10px; background:var(--brand); color:white; font-size:1rem; }
+        .nav-links { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+        .nav-links a { padding:9px 12px; border-radius:9px; color:#53635f; font-size:.92rem; font-weight:600; transition:background .18s,color .18s; }
+        .nav-links a:hover { color:var(--brand); background:#f0f7f5; }
+        .nav-links .nav-primary { background:var(--brand); color:white; }
+        .nav-links .nav-primary:hover { color:white; background:#10695f; }
+        main.site-wrap { min-height:calc(100vh - 220px); padding-top:34px; padding-bottom:56px; }
+        .site-footer { border-top:1px solid var(--line); background:#f8faf9; color:var(--muted); }
+        .footer-inner { padding-top:28px; padding-bottom:28px; display:flex; justify-content:space-between; align-items:flex-start; gap:30px; }
+        .footer-links { display:flex; flex-wrap:wrap; gap:20px; font-size:.9rem; }
+        .footer-links a:hover { color:var(--brand); }
+        .surface { background:var(--wash); border:1px solid var(--line); border-radius:16px; }
+        .item-card { overflow:hidden; border:1px solid var(--line); border-radius:14px; background:white; transition:transform .18s,box-shadow .18s; }
+        .item-card:hover { transform:translateY(-2px); box-shadow:0 12px 28px #172b2a12; }
+        .item-card img { display:block; width:100%; aspect-ratio:4/3; object-fit:cover; }
+        .item-card-body { padding:16px 18px; }
+        .item-card-body h2 { margin:0 0 5px; font-size:1.05rem; font-weight:650; }
+        .item-card-body p { margin:0; color:var(--muted); }
+        .page-title { margin:0 0 24px; font-size:1.8rem; line-height:1.2; font-weight:700; letter-spacing:-.035em; }
+        @media(max-width:640px) { .site-wrap { padding-inline:16px; } .site-nav-inner { align-items:flex-start; flex-direction:column; padding-block:15px; gap:12px; } .nav-links { gap:2px; } .nav-links a { padding:8px 9px; font-size:.86rem; } .footer-inner { flex-direction:column; gap:14px; } main.site-wrap { padding-top:24px; } }
+    </style>
+    <title>{% block title %}{% endblock %} | Puddle</title>
 </head>
 <body>
-    <nav class="py-6 px-6 flex justify-between item-center border-b border-gray-200">
-        <a href="/" class="text-xl font-semibold">Puddle</a>
-
-        <div class="space-x-6">
-            <a href="{% url 'item:new' %}" class="text-lg font-semibold hover:text-gray-500">New Item</a>
-            <a href="{% url 'item:items' %}" class="text-lg font-semibold hover:text-gray-500">Browse</a>
-
-            {% if request.user.is_authenticated %}
-            <a href="{% url 'conversation:inbox' %}" class="px-6 py-3 font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700 ">Inbox</a>
-            <a href="{% url 'dashboard:index' %}" class="px-6 py-3 font-semibold bg-gray-500 text-white rounded-xl hover:bg-gray-700 ">Dashboard</a>
-            <a href="{% url 'core:logout' %}" class="px-6 py-3 font-semibold bg-red-500 text-white rounded-xl hover:bg-gray-700 ">Logout</a>
-            {% else %}
-                <a href="{% url 'core:signup' %}" class="px-6 py-3 font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700 ">Sign up</a>
-                <a href="{% url 'core:login' %}" class="px-6 py-3 font-semibold bg-gray-500 text-white rounded-xl hover:bg-gray-700 ">Log in</a>
-            {% endif %}
+    <header class="site-nav">
+        <div class="site-wrap site-nav-inner">
+            <a href="/" class="brand"><span class="brand-mark">p</span><span>Puddle</span></a>
+            <nav class="nav-links" aria-label="Main navigation">
+                <a href="{% url 'item:items' %}">Browse</a>
+                <a href="{% url 'item:new' %}">Sell an item</a>
+                {% if request.user.is_authenticated %}
+                    <a href="{% url 'conversation:inbox' %}">Inbox</a>
+                    <a href="{% url 'dashboard:index' %}">My account</a>
+                    <a href="{% url 'core:logout' %}">Log out</a>
+                {% else %}
+                    <a href="{% url 'core:login' %}">Log in</a>
+                    <a href="{% url 'core:signup' %}" class="nav-primary">Create account</a>
+                {% endif %}
+            </nav>
         </div>
-    </nav>
-    <div class="px-6 py-6">
-        {% block content %}
-        {% endblock content %}
-    </div>
-    <footer class="py-6 px-6 flex justify-between bg-gray-800">
-    <div class="w-2/3 pr-10">
-        <h3 class="md-5 font-semibold text-gray-400">About</h3>
-
-        <p class="text-lg text-gray-500">lorem, blabalabnal fefpwfjpwjfpjfjfwoifjo</p>
-    </div>
-    <div class="w-2/3">
-        <h3 class="md-5 font-semibold text-gray-400">Menu</h3>
-
-        <ul class="mb-h font-semibold text-gray-500">
-            <li><a href="#" class="text-lg text-teal-500 hover:text-teal-700">About</a></li> 
-            <li><a href="{% url 'core:contact' %}" class="text-lg text-teal-500 hover:text-teal-700">Contact</a></li> 
-            <li><a href="#" class="text-lg text-teal-500 hover:text-teal-700">Privacy & Policy</a></li> 
-            <li><a href="#" class="text-lg text-teal-500 hover:text-teal-700">Term use</a></li> 
-        </ul>
-    </div>
+    </header>
+    <main class="site-wrap">{% block content %}{% endblock content %}</main>
+    <footer class="site-footer">
+        <div class="site-wrap footer-inner">
+            <div><a href="/" class="brand"><span class="brand-mark">p</span><span>Puddle</span></a><p class="mt-3 text-sm">A simpler way to find your next favorite thing.</p></div>
+            <nav class="footer-links" aria-label="Footer navigation"><a href="{% url 'core:contact' %}">Contact</a><a href="{% url 'item:items' %}">Browse items</a></nav>
+        </div>
     </footer>
 </body>
 </html>
